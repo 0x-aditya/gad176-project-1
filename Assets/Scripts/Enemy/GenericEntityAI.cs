@@ -1,10 +1,9 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public abstract class GenericEntityAI : MonoBehaviour
 {
     protected EnemyStats Stats;
+    protected GameObject target;
 
     protected float LastAttackTime;
 
@@ -12,16 +11,17 @@ public abstract class GenericEntityAI : MonoBehaviour
     {
         LastAttackTime = Time.time;
         Stats = GetComponent<EnemyStats>();
+        target = GameObject.FindWithTag("Player");
     }
 
     protected abstract void Attack();
 
     protected void Move()
     {
-        var distance = Vector3.Distance(Stats.target.transform.position, transform.position);
+        var distance = Vector3.Distance(target.transform.position, transform.position);
         if (distance > Stats.movementRangeFromPlayer)
         {
-            var direction = (Stats.target.transform.position - transform.position).normalized;
+            var direction = (target.transform.position - transform.position).normalized;
             var targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Stats.speed * Time.deltaTime);
             transform.position += direction * (Stats.speed * Time.deltaTime);

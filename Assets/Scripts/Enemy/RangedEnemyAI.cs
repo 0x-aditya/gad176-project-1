@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,7 +19,7 @@ public class RangedEnemyAI : GenericEntityAI
         var projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         var projectileRigidbody = projectile.GetComponent<Rigidbody>();
         projectile.GetComponent<ProjectileDamage>().damage = Stats.Damage;
-        projectileRigidbody.linearVelocity = (Stats.target.transform.position - transform.position).normalized * projectileSpeed;
+        projectileRigidbody.linearVelocity = (target.transform.position - transform.position).normalized * projectileSpeed;
         Destroy(projectile, projectileLifetime);
     }
     public void TookDamage()

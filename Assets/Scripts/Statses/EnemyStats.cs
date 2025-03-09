@@ -9,8 +9,4 @@ public class EnemyStats : Stats
     [Header("Attack")]
     public float attackRange;
     public float attackCooldown;
-    public GameObject target;
-    
-
-
 }
