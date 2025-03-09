@@ -21,7 +21,6 @@ public class RangedEnemyAI : GenericEntityAI
     public void TookDamage()
     {
         StartCoroutine(RunAway());
-        print("hi");
     }
 
     private IEnumerator RunAway()
@@ -40,7 +39,6 @@ public class RangedEnemyAI : GenericEntityAI
             yield return null;
         }
         isRunningAway = false;
-        print("hello");
     }
 
     private void Update()
