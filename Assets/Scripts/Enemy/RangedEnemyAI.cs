@@ -5,17 +5,22 @@ using Random = UnityEngine.Random;
 
 public class RangedEnemyAI : GenericEntityAI
 {
-    [SerializeField] private float rangeOfMotion;
-    [SerializeField] GameObject projectilePrefab;
-    [SerializeField] float projectileSpeed;
-    [SerializeField] float projectileLifetime;
+    [Header("Run Away")]
+    public float rangeOfMotion;
+    
+    [Header("Projectile")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed;
+    public float projectileLifetime;
     
     private bool isRunningAway = false;
+    
     protected override void Attack()
     {
         var projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         var projectileRigidbody = projectile.GetComponent<Rigidbody>();
-        projectileRigidbody.linearVelocity = (target.transform.position - transform.position).normalized * projectileSpeed;
+        projectile.GetComponent<ProjectileDamage>().damage = Stats.Damage;
+        projectileRigidbody.linearVelocity = (Stats.target.transform.position - transform.position).normalized * projectileSpeed;
         Destroy(projectile, projectileLifetime);
     }
     public void TookDamage()
@@ -34,8 +39,8 @@ public class RangedEnemyAI : GenericEntityAI
             
             var direction = (randomPosition - transform.position).normalized;
             var targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
-            transform.position += direction * (speed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Stats.speed * Time.deltaTime);
+            transform.position += direction * (Stats.speed * Time.deltaTime);
             yield return null;
         }
         isRunningAway = false;

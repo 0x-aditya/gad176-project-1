@@ -4,36 +4,31 @@ using UnityEngine;
 
 public abstract class GenericEntityAI : MonoBehaviour
 {
-    protected EnemyStats stats;
-    public float speed;
-    public float movementRangeFromPlayer;
-    public float attackRange;
-    public float attackCooldown;
-    
-    public GameObject target;
-    protected float lastAttackTime;
+    protected EnemyStats Stats;
+
+    protected float LastAttackTime;
 
     protected virtual void Start()
     {
-        lastAttackTime = Time.time;
-        stats = GetComponent<EnemyStats>();
+        LastAttackTime = Time.time;
+        Stats = GetComponent<EnemyStats>();
     }
 
     protected abstract void Attack();
-    
-    public void Move()
+
+    protected void Move()
     {
-        var distance = Vector3.Distance(target.transform.position, transform.position);
-        if (distance > movementRangeFromPlayer)
+        var distance = Vector3.Distance(Stats.target.transform.position, transform.position);
+        if (distance > Stats.movementRangeFromPlayer)
         {
-            var direction = (target.transform.position - transform.position).normalized;
+            var direction = (Stats.target.transform.position - transform.position).normalized;
             var targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
-            transform.position += direction * speed * Time.deltaTime;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Stats.speed * Time.deltaTime);
+            transform.position += direction * (Stats.speed * Time.deltaTime);
         }
 
-        if (!(distance <= attackRange) || !(Time.time - lastAttackTime >= attackCooldown)) return;
-        lastAttackTime = Time.time;
+        if (!(distance <= Stats.attackRange) || !(Time.time - LastAttackTime >= Stats.attackCooldown)) return;
+        LastAttackTime = Time.time;
         Attack();
     }
 }
